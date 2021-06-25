@@ -145,14 +145,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
   createUserNames(accounts);
 });
 
+function updateUI(account){
+  displayMovements(account.movements);
+    displayTotals(account);
+}
+
 btnLogin.addEventListener('click',(e)=>{ 
   e.preventDefault();
   let validatedUser = validateUser();
   localStorage.setItem("activeUser", validatedUser.userName);
   if(validatedUser){
     labelWelcome.textContent = `Welcome, ${validatedUser.owner.split(' ')[0]}!`;
-    displayMovements(validatedUser.movements);
-    displayTotals(validatedUser);
+    updateUI(validatedUser);
   }
   else{
     labelWelcome.textContent = `Invalid user details! Try login again.`;
@@ -187,9 +191,7 @@ btnTransfer.addEventListener('click', (e)=>{
       alert("Account balance not enough!!!");
       return;
     }
-
-    displayMovements(activeUser.movements);
-    displayTotals(activeUser);
+    updateUI(activeUser);    
   }
 });
 
