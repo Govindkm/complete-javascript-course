@@ -1,0 +1,169 @@
+Features of JAVASCRIPT
+
+
+1. High-Level:
+    Javascript is a high level language which means that 
+        Ulike lower level language like pascal C or C++, Javascript is not meant to write code to instruct the hardware that it is running in. Instead is designed to communicate with softwares or programs like web browser or operating system. So JS does not require to build or translate the commands to machine friendly instructions.
+        In this way many complex tasks that a program needs to have to be done like memory management is done by environment developed around the language compiler/interpreter. The complexity of the code reduces.
+        On the other hand with not having controls on the crucial tasks makes these languages inefficient for resource crunched environments. So optimization is much less.
+
+2. Garbage-collection:
+    Javascript has built in garbage collection mechanism
+    The language is designed to have a dedicated resource which checks for out of scope resources and memory and automatically cleans up so that they can be reused while program run behind the scene.
+
+3. Interpreted or Just in Time(JIT):
+    Javascript is an interpreter based language which means that it does not require a compiler to read the code in one go and return a instruction set for the machine.
+
+4. Multiple Paradigm language
+    Javascript can be used for various programming styles/procedure/Paradigm eg. Procedural/Object Oriented/Functional
+
+5. Protype-based object-Oriented
+
+6. First-class function
+    In languages with First-class functions, functions are simply treated as variables and we can pass them into other functuons, and return them from functions.
+
+7. Dynamically Typed(Dynamic)
+    Javascript provides the feature to programmer where they do not have to specify the type of the variables that they are using, instead they are assigned type dynamically at run time based on the type of the variable stored in it.
+
+8. Single-threaded
+
+9. Non-blocking event loop
+
+---------------------------------------------------------
+---------------------------------------------------------
+Scope and Scoping in Javascript
+1. Scoping 
+    How our program's variables are organised and accessed. "Where do variables live?" or "Where can we access a certain variable, and where not?"
+
+2. Lexical Scoping : Javascript uses Lexical Scoping
+    Scoping is controlled by placement of function and blocks in the code.
+
+3. Scope
+    Space or environment in which a certain variable can be accessed.
+
+    3 Different types of scope in Javascript are
+
+    i) Global Scope
+
+    ii) Function Scope
+
+    iii) Block Scope(ES6)
+        //todo Let and const are block scoped whereas var is only function scoped.
+        
+        A scope will never have access to inner scope variables no matter where it is in the call stack.
+
+=========================================================
+
+Hoisting in Javascript
+
+1. Hoisting 
+    //todo Makes some types of variables accessible/usable in the code before they are actually declared. "Variables lifted to the top of their scope."
+
+2. Temporal Dead Zone(TDZ)
+    Mechanism used by javascript to overcome the shortcoming of hoisting in var variables. This is used by let and const.
+
+==============================================
+
+THIS keyword in javascript
+
+this keyword/variable:
+    It is a special variable that is created for every execution context(every function). Takes the value of (points to) the "owner" of the function in which the this keyword is used.
+
+    this is not static and its value depends on how the function is called. Its value is only assigned when the funtion is actually called.
+
+    Different scenario where function is called
+
+    1. object method
+        eg date.getFullYear()
+        Here this will point to the object which calls the method.
+
+    2. simple function call
+        Here the this keyword remains UNDEFINED(if using strict mode) else will point to window object.
+
+    3. arrow function 
+        an arrow function does not get its own this object and instead the parent function/scope where it is defined, it takes this from it.
+
+    4. eventlistner 
+        an function passed to event listner will get this keyword containing the dom object which triggers the event.
+
+        =========================================
+
+Regular functions vs Arrow functions
+
+Destructuring of Array
+        let [a, b, c , , d] = [1,2,3,4,5];
+        a=1, b=2, c=3, d=5;
+
+SPREAD operator and REST Operator
+
+        Spread works on the RIGHT side of =
+
+        arr = [1,2,3,4,5]
+        ...arr is equivalent to 1 2 3 4 5
+        
+        Rest works on the LEFT side of =
+        Rest is used in functionif the number of parameters are not known.
+
+Short Circuiting (&& and ||)
+        We can write conditionals using && and || only
+
+        eg.
+
+        isAvailable = isAvailable?isAvailable:false;
+
+        the above code can be written like
+
+        isAvailable = isAvailable || false;
+
+        Similarly 
+        if(isTrue)
+        {
+            isTrue=isTrue+3;
+        }
+
+        can be written as
+
+        isTrue = isTrue&&isTrue+3;
+
+Nullish Coalescing Operator(??) in ES2020
+        Let us consider this situation;
+
+        let items = 0;
+
+        items = items || 10;
+
+        items will get 10, but we want 0 as it is not null or UNDEFINED
+
+        Solution to this is : 
+
+        items = items ?? 10;
+
+
+
+foreach vs for of vs for vs for in
+note: use for of method instead of for in
+
+What javascript function use call by value || call by reference? 
+ans call by value => js cannot use call by reference unlike c and c++ because it copies value stored in the stack memory allocated to the variable. But the objects in js store reference itself so they behave as if they are using call by reference.
+
+Callback function : functions getting function as parameters
+
+
+function returning function
+
+eg
+
+let greet = (greeting)=>{
+    return (name)=>{
+        console.log(`${greeting} ${name}`);
+    }
+}
+
+what is closure ?
+ans: When function itself returns another function instead then such functions forms closure
+
+Some function methods which is used to bind an object(this keyword) with any function call
+1. call method 
+2. apply method
+3. bind method
+
