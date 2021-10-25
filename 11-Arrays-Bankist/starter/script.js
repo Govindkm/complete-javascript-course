@@ -79,14 +79,17 @@ let validateUser = ()=>{
     return acc;
    }
    else{
+    containerApp.style.opacity = 0;
     return false;
    }
 }
 
-let displayMovements = (movements)=>{
+let displayMovements = (movements, sorted = false)=>{
   containerMovements.innerHTML = '';
-
-  movements.forEach((mov, i)=>{
+  console.log(movements);
+  let movementsSorted = sorted ? movements.slice().sort((a,b)=>a-b) : movements;
+  console.log(movementsSorted);
+  movementsSorted.forEach((mov, i)=>{
     let type = mov<0?'withdrawal':'deposit';
 
     let html = `
@@ -146,9 +149,18 @@ document.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function updateUI(account){
+  ///alert(`${accounts.map((account)=>account.movements).flat().reduce((acc, curr)=>acc+=curr)}`);
   displayMovements(account.movements);
     displayTotals(account);
 }
+
+let sorted = false;
+
+btnSort.addEventListener('click', (e) => {
+  e.preventDefault();
+  sorted = !sorted;
+  displayMovements(accounts.find((acc)=>acc.userName == localStorage.getItem('activeUser')).movements, sorted);
+});
 
 btnLogin.addEventListener('click',(e)=>{ 
   e.preventDefault();
@@ -194,6 +206,25 @@ btnTransfer.addEventListener('click', (e)=>{
     updateUI(activeUser);    
   }
 });
+
+btnClose.addEventListener('click', (e)=>{
+  e.preventDefault();
+  const activeUserIndex = accounts.findIndex((acc) => {
+    console.log(acc.userName);
+    return (acc.userName === localStorage.getItem('activeUser'));
+  });
+  console.log(inputCloseUsername.value);
+  console.log(inputClosePin.value);
+  console.log(accounts[activeUserIndex].userName);
+  console.log(accounts[activeUserIndex].pin);
+  if(inputCloseUsername.value==accounts[activeUserIndex].userName && inputClosePin.value == accounts[activeUserIndex].pin){
+    inputCloseUsername.value = '';
+    inputClosePin.value = '';    
+    labelWelcome.textContent = `User ${accounts[activeUserIndex].user.slice()} has been removed from records!`;
+    accounts.splice(activeUserIndex, 1);
+    containerApp.style.opacity = 0;
+  }
+})
 
 
 /////////////////////////////////////////////////
@@ -322,3 +353,89 @@ console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
 console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
 
 */
+
+
+//  Practice Problems
+
+//1. Calculate all the deposits across all accounts
+//let bankDeposits = accounts.map(acc=>acc.movements).flat().filter((movements=>movements>0)).reduce((accumulator, element)=>accumulator+=element, 0);
+//console.log(bankDeposits);
+
+//2. Find the number of deposits greaater than 1000
+//let count = accounts.map(acc=>acc.movements).flat().filter(dep=>dep>=1000).length;
+//let count = accounts.flatMap(acc=>acc.movements).reduce((acc, element)=> element>=1000 ? acc+1 : acc, 0);
+//console.log(count);
+
+//3. Convert the strings in title case
+// function convertToTitleCase(title){
+//   let exceptions = ['a', 'an', 'the', 'is', 'or', 'to', 'but', 'on', 'or', 'nor'];
+//   title = title.toLowerCase().split(' ');
+//   title = title.map(word=>{
+//     if(!exceptions.includes(word)){
+//       word = word.charAt(0).toUpperCase() + word.slice(1);
+//   }
+//   return word;
+// })
+// return title.join(' ');
+// }
+// let title = "this is a title we want to work on";
+
+// console.log(convertToTitleCase(title));
+
+//Coding Challenge 4
+
+/* 
+Julia and Kate are still studying dogs, and this time they are studying if dogs are eating too much or too little.
+Eating too much means the dog's current food portion is larger than the recommended portion, and eating too little is the opposite.
+Eating an okay amount means the dog's current food portion is within a range 10% above and 10% below the recommended portion (see hint).
+
+1. Loop over the array containing dog objects, and for each dog, calculate the recommended food portion and add it to the object as a new property. Do NOT create a new array, simply loop over the array. Forumla: recommendedFood = weight ** 0.75 * 28. (The result is in grams of food, and the weight needs to be in kg)
+2. Find Sarah's dog and log to the console whether it's eating too much or too little. HINT: Some dogs have multiple owners, so you first need to find Sarah in the owners array, and so this one is a bit tricky (on purpose) 🤓
+3. Create an array containing all owners of dogs who eat too much ('ownersEatTooMuch') and an array with all owners of dogs who eat too little ('ownersEatTooLittle').
+4. Log a string to the console for each array created in 3., like this: "Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+5. Log to the console whether there is any dog eating EXACTLY the amount of food that is recommended (just true or false)
+6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
+7. Create an array containing the dogs that are eating an OKAY amount of food (try to reuse the condition used in 6.)
+8. Create a shallow copy of the dogs array and sort it by recommended food portion in an ascending order (keep in mind that the portions are inside the array's objects)
+
+HINT 1: Use many different tools to solve these challenges, you can use the summary lecture to choose between them 😉
+HINT 2: Being within a range 10% above and below the recommended portion means: current > (recommended * 0.90) && current < (recommended * 1.10). Basically, the current portion should be between 90% and 110% of the recommended portion.
+
+TEST DATA:
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] }
+];
+
+GOOD LUCK 😀
+*/
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] }
+];
+
+//recommendedFood = weight ** 0.75 * 28
+dogs.map(dog=>{
+  dog.recommendedFood = Math.round(dog.weight ** 0.75 * 28);
+  return dog;
+});
+
+function checkFood(dog){
+  if(dog.curFood > 1.1*dog.recommendedFood){
+    console.log(`${dog.owners.join(' and ')}'s Dog is eating too much`);
+  }
+  else if(dog.curFood < 0.9*dog.recommendedFood){
+    console.log(`${dog.owners.join(' and ')}'s Dog is eating less than required`);
+  }
+  else {
+    console.log(`${dog.owners.join(' and ')}'s Dog is eating correct amount`);
+  }
+}
+dogs.forEach((dog)=>{
+  checkFood(dog);
+})
